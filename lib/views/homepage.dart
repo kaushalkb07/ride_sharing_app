@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,37 +14,39 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFF5F6F7), // Light grey background
+        scaffoldBackgroundColor: const Color(0xFFF5F6F7),
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.indigo,
           brightness: Brightness.light,
         ),
-        canvasColor: Colors.white, // Fixes Drawer and BottomNavigationBar bg color
+        canvasColor: Colors.white,
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black),
           titleTextStyle: TextStyle(
-              color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
 
-// Custom Hamburger Icon Widget (3 lines)
 class CustomHamburgerIcon extends StatelessWidget {
   final double width;
   final double height;
   final Color color;
 
   const CustomHamburgerIcon({
-    Key? key,
+    super.key,
     this.width = 28,
     this.height = 20,
     this.color = Colors.black,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +72,8 @@ class CustomHamburgerIcon extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   void _openDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
   }
@@ -75,7 +81,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Drawer section
       drawer: Drawer(
         child: ListView(
           children: const [
@@ -91,8 +96,6 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-
-      // Custom AppBar with white background & bottom border
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Container(
@@ -112,14 +115,28 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                const Expanded(
+                Expanded(
                   child: Center(
-                    child: Text(
-                      "Welcome, User",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
+                    child: RichText(
+                      text: const TextSpan(
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'Welcome, ',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          TextSpan(
+                            text: 'User',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                            text: '!',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -137,8 +154,6 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-
-      // Body content wrapped in SingleChildScrollView for scrolling
       body: Container(
         color: const Color(0xFFF5F6F7),
         child: SingleChildScrollView(
@@ -146,18 +161,15 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Current location label
               const Text(
                 'Your current location',
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
               const SizedBox(height: 4),
-        
-              // Location row with icon and address text
               Row(
                 children: const [
                   Icon(Icons.location_on_outlined,
-                      color: Colors.redAccent, size: 20),
+                      color: Colors.black, size: 20),
                   SizedBox(width: 4),
                   Text(
                     'Bhatbhateni, Kalanki',
@@ -167,16 +179,13 @@ class HomePage extends StatelessWidget {
                   Icon(Icons.keyboard_arrow_down_rounded, size: 20),
                 ],
               ),
-        
               const SizedBox(height: 20),
-        
-              // Map container with rounded corners
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: SizedBox(
                   height: 250,
                   child: FlutterMap(
-                    options: MapOptions(
+                    options: const MapOptions(
                       initialCenter: LatLng(27.6936, 85.3149),
                       initialZoom: 14.0,
                     ),
@@ -184,39 +193,53 @@ class HomePage extends StatelessWidget {
                       TileLayer(
                         urlTemplate:
                             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                        subdomains: ['a', 'b', 'c'],
+                        subdomains: const ['a', 'b', 'c'],
                         userAgentPackageName: 'com.example.ride_sharing_app',
                       ),
                     ],
                   ),
                 ),
               ),
-        
               const SizedBox(height: 20),
-        
-              // "Where do you wanna go?" input style container
+              // Where do you wanna go? input style container
               Container(
                 margin: const EdgeInsets.only(bottom: 10),
-                padding: const EdgeInsets.all(14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
-                  children: const [
-                    Icon(Icons.location_pin, color: Colors.redAccent),
-                    SizedBox(width: 12),
+                  children: [
+                    const Icon(Icons.location_pin,
+                        color: Colors.redAccent, size: 20),
+                    const SizedBox(width: 12),
                     Expanded(
-                      child: Text(
-                        'Where do you wanna go?',
-                        style: TextStyle(fontSize: 16),
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          hintText: 'Where do you wanna go?',
+                          hintStyle: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        onTap: () {
+                          print('TextField tapped');
+                        },
                       ),
                     ),
                   ],
                 ),
               ),
-        
-              // Choose a saved place option
               GestureDetector(
                 onTap: () {},
                 child: Container(
@@ -228,7 +251,7 @@ class HomePage extends StatelessWidget {
                   ),
                   child: Row(
                     children: const [
-                      Icon(Icons.bookmark_border, color: Colors.redAccent),
+                      Icon(Icons.bookmark_border, color: Colors.black),
                       SizedBox(width: 12),
                       Expanded(
                         child: Text(
@@ -236,13 +259,12 @@ class HomePage extends StatelessWidget {
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
-                      Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                      Icon(Icons.arrow_forward_ios,
+                          size: 16, color: Colors.grey),
                     ],
                   ),
                 ),
               ),
-        
-              // Set destination on a map option
               GestureDetector(
                 onTap: () {},
                 child: Container(
@@ -253,7 +275,7 @@ class HomePage extends StatelessWidget {
                   ),
                   child: Row(
                     children: const [
-                      Icon(Icons.map_outlined, color: Colors.redAccent),
+                      Icon(Icons.map_outlined, color: Colors.black),
                       SizedBox(width: 12),
                       Expanded(
                         child: Text(
@@ -261,17 +283,47 @@ class HomePage extends StatelessWidget {
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
-                      Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                      Icon(Icons.arrow_forward_ios,
+                          size: 16, color: Colors.grey),
                     ],
                   ),
                 ),
               ),
-        
-              const SizedBox(height: 28),
-        
-              // Offer Spotlight header
+              // New on Town
+              const SizedBox(height: 20),
+              Container(
+                width: double.infinity,
+                height: 150,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'New on Town',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'on the market, beat the market',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
               const Text(
-                '🎯 Offer Spotlight',
+                'Offer Spotlight',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -279,8 +331,6 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-        
-              // Offers slider horizontal list
               SizedBox(
                 height: 200,
                 child: ListView.builder(
@@ -302,7 +352,6 @@ class HomePage extends StatelessWidget {
                       ),
                       child: Stack(
                         children: [
-                          // Offer image with rounded corners
                           ClipRRect(
                             borderRadius: BorderRadius.circular(16),
                             child: Image.asset(
@@ -312,8 +361,6 @@ class HomePage extends StatelessWidget {
                               height: double.infinity,
                             ),
                           ),
-        
-                          // Text overlay at bottom
                           Positioned(
                             bottom: 0,
                             left: 0,
@@ -359,16 +406,23 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-
-      // Fixed Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.redAccent,
+        selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
-          BottomNavigationBarItem(icon: Icon(Icons.local_offer_outlined), label: 'Offers'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'History',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_offer_outlined),
+            label: 'Offers',
+          ),
         ],
       ),
     );
