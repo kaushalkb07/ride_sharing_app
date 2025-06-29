@@ -15,9 +15,21 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
   void _onBottomBarTap(int index) {
+    if (_currentIndex == index) return;
     setState(() {
       _currentIndex = index;
     });
+    switch (index) {
+      case 0:
+        // Already on HomePage
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/history');
+        break;
+      case 2:
+        Navigator.pushReplacementNamed(context, '/offers');
+        break;
+    }
   }
 
   @override

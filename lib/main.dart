@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'views/homepage.dart'; // Import your HomePage
+import 'package:ride_sharing_app/routes/app_routes.dart';
+import 'package:ride_sharing_app/routes/route_generator.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,9 +16,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        fontFamily: 'Poppins', // Set global font to Poppins
         scaffoldBackgroundColor: const Color(0xFFF5F6F7),
-        primarySwatch: Colors.indigo,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+          brightness: Brightness.light,
+        ),
+        canvasColor: Colors.white,
+        fontFamily: 'Poppins',
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -27,11 +34,13 @@ class MyApp extends StatelessWidget {
           ),
         ),
         textTheme: const TextTheme(
-          bodyMedium: TextStyle(fontSize: 14),
-          bodyLarge: TextStyle(fontSize: 16),
+          bodyMedium: TextStyle(fontSize: 16),
+          bodySmall: TextStyle(fontSize: 12),
+          headlineSmall: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
-      home: HomePage(),
+      initialRoute: AppRoutes.home,
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

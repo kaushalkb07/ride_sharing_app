@@ -28,7 +28,7 @@ class CustomBottomBar extends StatelessWidget {
           label: 'History',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.local_offer_outlined),
+          icon: Icon(Icons.local_offer),
           label: 'Offers',
         ),
       ],
