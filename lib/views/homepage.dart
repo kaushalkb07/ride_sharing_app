@@ -1,159 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:ride_sharing_app/components/appbar.dart';
+import 'package:ride_sharing_app/components/bottombar.dart';
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Ride Sharing UI',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFF5F6F7),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
-          brightness: Brightness.light,
-        ),
-        canvasColor: Colors.white,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black),
-          titleTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-      home: const HomePage(),
-    );
-  }
-}
-
-class CustomHamburgerIcon extends StatelessWidget {
-  final double width;
-  final double height;
-  final Color color;
-
-  const CustomHamburgerIcon({
-    super.key,
-    this.width = 28,
-    this.height = 20,
-    this.color = Colors.black,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final lineHeight = height / 6;
-    final lineSpacing = lineHeight;
-
-    return SizedBox(
-      width: width,
-      height: height,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(width: width, height: lineHeight, color: color),
-          SizedBox(height: lineSpacing),
-          Container(width: width, height: lineHeight, color: color),
-          SizedBox(height: lineSpacing),
-          Container(width: width * 0.5, height: lineHeight, color: color),
-        ],
-      ),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
-  void _openDrawer(BuildContext context) {
-    Scaffold.of(context).openDrawer();
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+
+  void _onBottomBarTap(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          children: const [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Colors.indigo),
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-            ),
-            ListTile(title: Text('Home')),
-            ListTile(title: Text('Settings')),
-          ],
-        ),
+      appBar: const CustomAppBar(
+        title: 'User',
       ),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            border: Border(
-              bottom: BorderSide(color: Color(0xFFE0E0E0), width: 1),
-            ),
-          ),
-          child: SafeArea(
-            child: Row(
-              children: [
-                Builder(
-                  builder: (context) => IconButton(
-                    icon: const CustomHamburgerIcon(color: Colors.black),
-                    onPressed: () => _openDrawer(context),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Center(
-                    child: RichText(
-                      text: const TextSpan(
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Welcome, ',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          TextSpan(
-                            text: 'User',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(
-                            text: '!',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: CircleAvatar(
-                    radius: 18,
-                    backgroundImage: AssetImage('assets/images/profile.png'),
-                    backgroundColor: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      drawer: const CustomAppBar(title: 'User').drawer,
       body: Container(
         color: const Color(0xFFF5F6F7),
         child: SingleChildScrollView(
@@ -201,7 +74,6 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              // Where do you wanna go? input style container
               Container(
                 margin: const EdgeInsets.only(bottom: 10),
                 padding:
@@ -289,7 +161,6 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              // New on Town
               const SizedBox(height: 20),
               Container(
                 width: double.infinity,
@@ -336,9 +207,9 @@ class HomePage extends StatelessWidget {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: 5,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (contextLocal, index) {
                     return Container(
-                      width: 160,
+                      width: 163,
                       margin: EdgeInsets.only(right: index == 4 ? 0 : 12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
@@ -406,24 +277,9 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'History',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_offer_outlined),
-            label: 'Offers',
-          ),
-        ],
+      bottomNavigationBar: CustomBottomBar(
+        currentIndex: _currentIndex,
+        onTap: _onBottomBarTap,
       ),
     );
   }
