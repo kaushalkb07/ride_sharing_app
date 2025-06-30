@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 
-class ActivityAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ActivityAppBar({super.key});
+class ActivityAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final Function(String?) onFilterChanged;
+
+  const ActivityAppBar({super.key, required this.onFilterChanged});
+
+  @override
+  ActivityAppBarState createState() => ActivityAppBarState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(96);
+}
+
+class ActivityAppBarState extends State<ActivityAppBar> {
+  String? _selectedFilter = 'Bike'; // Default to Bike
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +26,12 @@ class ActivityAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 2.0), // Further reduced vertical padding
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
+              const SizedBox(height: 10),
               const Text(
                 'Ride History',
                 style: TextStyle(
@@ -29,19 +40,17 @@ class ActivityAppBar extends StatelessWidget implements PreferredSizeWidget {
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(height: 10), // Reduced spacing
+              const SizedBox(height: 10),
               Row(
                 children: [
-                  _buildButton(context, 'Bike', false),
+                  _buildButton(context, 'Bike', _selectedFilter == 'Bike'),
                   const SizedBox(width: 8),
-                  _buildButton(context, 'Car', false),
+                  _buildButton(context, 'Car', _selectedFilter == 'Car'),
                   const SizedBox(width: 8),
-                  _buildButton(context, 'Rental', false),
-                  const SizedBox(width: 8),
-                  _buildButton(context, 'Cancelled Rides', true),
+                  _buildButton(context, 'Cancelled Rides', _selectedFilter == 'Cancelled Rides'),
                 ],
               ),
-              const SizedBox(height: 10), // Reduced spacing
+              const SizedBox(height: 10),
             ],
           ),
         ),
@@ -49,32 +58,31 @@ class ActivityAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget _buildButton(BuildContext context, String label, bool isBike) {
+  Widget _buildButton(BuildContext context, String label, bool isSelected) {
     return GestureDetector(
       onTap: () {
+        setState(() {
+          _selectedFilter = label;
+        });
         print('$label button pressed');
+        widget.onFilterChanged(_selectedFilter);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(
-            horizontal: 12, vertical: 4), // Reduced padding
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
-          color: isBike ? Colors.black : Colors.white,
-          border: isBike ? null : Border.all(color: Colors.black, width: 1),
+          color: isSelected ? Colors.black : Colors.white,
+          border: isSelected ? null : Border.all(color: Colors.black, width: 1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
           label,
           style: TextStyle(
-            fontSize: 12, // Reduced font size
-            color: isBike ? Colors.white : Colors.black,
+            fontSize: 12,
+            color: isSelected ? Colors.white : Colors.black,
             fontWeight: FontWeight.w500,
           ),
         ),
       ),
     );
   }
-
-  @override
-  Size get preferredSize =>
-      const Size.fromHeight(96); // Increased to cover 5.8-pixel overflow
 }
