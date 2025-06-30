@@ -197,8 +197,6 @@ class _HistoryPageState extends State<HistoryPage> {
       },
     ];
 
-    //มิ
-
     // Filter rides based on selected filter
     final filteredRides = _filter == null || _filter == 'Cancelled Rides'
         ? allRides.where((ride) => ride['type'] == 'Cancelled').toList()
@@ -242,6 +240,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 return GestureDetector(
                   onTap: () {
                     print('Ride item tapped: ${ride['title']}');
+                    Navigator.pushNamed(context, '/ride_details', arguments: ride);
                   },
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 10),
@@ -336,6 +335,10 @@ class _HistoryPageState extends State<HistoryPage> {
                                     GestureDetector(
                                       onTap: () {
                                         print('Request Again tapped for ${ride['title']}');
+                                        Navigator.pushNamed(context, '/book_ride', arguments: {
+                                          'pickup': ride['pickup'],
+                                          'dropoff': ride['dropoff'],
+                                        });
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -353,6 +356,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                     GestureDetector(
                                       onTap: () {
                                         print('Rate Now tapped for ${ride['title']}');
+                                        Navigator.pushNamed(context, '/rate_ride', arguments: ride['title']);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
