@@ -68,7 +68,7 @@ class ActivityAppBarState extends State<ActivityAppBar> {
         widget.onFilterChanged(_selectedFilter);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? Colors.black : Colors.white,
           border: isSelected ? null : Border.all(color: Colors.black, width: 1),
@@ -77,7 +77,7 @@ class ActivityAppBarState extends State<ActivityAppBar> {
         child: Text(
           label,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 14,
             color: isSelected ? Colors.white : Colors.black,
             fontWeight: FontWeight.w500,
           ),
